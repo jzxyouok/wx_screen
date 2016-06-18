@@ -130,18 +130,26 @@ var User = function () {
 };
 var Lottery = function(){
   var _$startBtn = $("#startBtn"),
-    _$endBtn = $("#endBtn");
+    _$endBtn = $("#endBtn"),
+    _$awards = $(".list-unstyled"),
+    _$resetBtn = $("#resetBtn");
   return {
     init: function () {
       this.bindBtn();
     },
     //绑定事件
     bindBtn: function () {
+      var self = this;
       _$startBtn.on('click',function(){
         bingo.start();
       });
       _$endBtn.on('click',function(){
         bingo.end();
+        self.loadAwards();
+      });
+      _$resetBtn.on('click',function(){
+        bingo.reset();
+        self.loadAwards();
       })
     },
     //渲染参与者头像
@@ -149,6 +157,13 @@ var Lottery = function(){
       var $lottery_guy = $("#lottery_guy");
       $lottery_guy.find(".nickname").text(name);
       $lottery_guy.find("img").attr("src", url);
+    },
+    //渲染中奖者信息
+    loadAwards: function () {
+      _$awards.html('');
+      $.each(user.getLuckGuys(), function (index, element) {
+        _$awards.append($('<li>').append('<div class="row"><div class="name col-md-10">' + element.nickname + '</div><div class="col-md-2"><a href="#" data-id="' + element.id + '"> <i class="fa fa-remove"> </div></i></a>'));
+      });
     }
   }
 };
